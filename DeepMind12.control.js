@@ -25,20 +25,20 @@ var CC_IDX = [];
 var CC_MAP = [];
 var CC = {
    ARP_RATE             : 12,
-	ARP_GATE_TIME        : 13,
-	LFO1_RATE            : 16,
-	LFO1_DELAY_TIME      : 17,
-	LFO2_RATE            : 18,
-	LFO2_DELAY_TIME      : 19,
-	OSC1_PITCH_MOD       : 20,
-	OSC1_PWM             : 21,
-	OSC2_PITCH_MOD       : 23,
-	OSC2_TONE_MOD        : 24,
-	OSC2_PITCH           : 25,
+   ARP_GATE_TIME        : 13,
+   LFO1_RATE            : 16,
+   LFO1_DELAY_TIME      : 17,
+   LFO2_RATE            : 18,
+   LFO2_DELAY_TIME      : 19,
+   OSC1_PITCH_MOD       : 20,
+   OSC1_PWM             : 21,
+   OSC2_PITCH_MOD       : 23,
+   OSC2_TONE_MOD        : 24,
+   OSC2_PITCH           : 25,
    OSC2_LEVEL           : 26,
-	NOISE_LEVEL          : 27,
-	UNISON_DETUNE        : 28,
-	VCF_FREQ             : 29,
+   NOISE_LEVEL          : 27,
+   UNISON_DETUNE        : 28,
+   VCF_FREQ             : 29,
    VCF_RES              : 30,
    VCF_ENV              : 31,
    VCF_LFO              : 33,
@@ -95,7 +95,7 @@ else if (host.platformIsLinux())
 function init() {
    host.getMidiInPort(0).setMidiCallback(onMidi);
    keys = host.getMidiInPort(0).createNoteInput("Behringer DeepMind12");
-	transport = host.createTransport();
+   transport = host.createTransport();
    application = host.createApplication();
    cursorTrack = host.createCursorTrack(1, 1);
    primaryDevice = cursorTrack.createCursorDevice();
