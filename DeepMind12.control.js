@@ -95,6 +95,7 @@ else if (host.platformIsLinux())
 function init() {
    host.getMidiInPort(0).setMidiCallback(onMidi);
    keys = host.getMidiInPort(0).createNoteInput("Behringer DeepMind12");
+   keys.setShouldConsumeEvents(false);
    transport = host.createTransport();
    application = host.createApplication();
    cursorTrack = host.createCursorTrack(1, 1);
