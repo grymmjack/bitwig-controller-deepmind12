@@ -1,5 +1,5 @@
-loadAPI(10);
-host.setShouldFailOnDeprecatedUse(true);
+loadAPI(2);
+host.setShouldFailOnDeprecatedUse(false);
 host.defineController("Behringer", "DeepMind12", "0.1", "82f0ae68-a502-4114-a265-c3112cd6a10d", "grymmjack");
 host.defineMidiPorts(1, 1);
 host.defineSysexIdentityReply("f0 7e ?? 06 01 00 20 32 20 00 01 00 ?? 00 ?? ?? F7 01 F7");
@@ -21,10 +21,10 @@ var NRPN_NUMS = {
 }
 
 var CHROMATIC = [ 'C', 'Db', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B' ];
-
+var CC_IDX = [];
+var CC_MAP = [];
 var CC = {
-   MOD_WHEEL            : 1,
-	ARP_RATE             : 12,
+   ARP_RATE             : 12,
 	ARP_GATE_TIME        : 13,
 	LFO1_RATE            : 16,
 	LFO1_DELAY_TIME      : 17,
@@ -69,12 +69,15 @@ var CC = {
    ENV_CURVES_MOD_D     : 59,
    ENV_CURVES_MOD_S     : 60,
    ENV_CURVES_MOD_R     : 61,
-   PORTAMENTO           : 5
+   PORTAMENTO           : 5,
+   MOD_WHEEL            : 1
 };
 
-CC_MAP = [];
+var i =0;
 for (var key in CC) {
    CC_MAP[CC[key]] = key;
+   CC_IDX[key] = i;
+   i++;
 }
 
 if (host.platformIsWindows()) {
@@ -90,12 +93,15 @@ else if (host.platformIsLinux())
 }
 
 function init() {
-   transport = host.createTransport();
    host.getMidiInPort(0).setMidiCallback(onMidi);
-   host.showPopupNotification("Deepmind12 initialized!");
+   keys = host.getMidiInPort(0).createNoteInput("Behringer DeepMind12");
 	transport = host.createTransport();
-	application = host.createApplication();
-   keys = host.getMidiInPort(0).createNoteInput("Keys", "?0????");
+   application = host.createApplication();
+   cursorTrack = host.createCursorTrack(1, 1);
+   primaryDevice = cursorTrack.createCursorDevice();
+   primaryDevice.exists().markInterested();
+   remoteControls = primaryDevice.createCursorRemoteControlsPage(46);
+   
    // Notifications:
    host.getNotificationSettings().setShouldShowSelectionNotifications(true);
    host.getNotificationSettings().setShouldShowChannelSelectionNotifications(true);
@@ -105,6 +111,8 @@ function init() {
    host.getNotificationSettings().setShouldShowPresetNotifications(true);
    host.getNotificationSettings().setShouldShowMappingNotifications(true);
    host.getNotificationSettings().setShouldShowValueNotifications(true);   
+
+   host.showPopupNotification("DeepMind12 initialized!");
 }
 
 function onMidi(status, data1, data2) {
@@ -122,18 +130,20 @@ function onMidi(status, data1, data2) {
          var FREQ   = 0 || (NOTE_NUM > 0 && NOTE_NUM < 128) ? Math.pow(2, (NOTE_NUM - 69) / 12) * 440 : null
          var PITCH  = CHROMATIC[NOTE_NUM % 12] + OCTAVE;
          var LETTER = PITCH.slice(0, 1);
-         host.println("NOTE: " + NOTE_NUM + ", OCTAVE: " + OCTAVE + ", NOTE: " + LETTER + ", PITCH: " + PITCH + ", FREQUENCY: " + parseInt(FREQ));
+         println("NOTE: " + NOTE_NUM + ", OCTAVE: " + OCTAVE + ", NOTE: " + LETTER + ", PITCH: " + PITCH + ", FREQUENCY: " + parseInt(FREQ));
       } else if (typeof(CC_MAP[data1]) != 'undefined') { // CC
          CONTROLLER = CC_MAP[data1];
-         host.println("CC: CONTROLLER: " + CONTROLLER + "(" + data1 + ")=" + data2);
+         idx = CC_IDX[CONTROLLER];
+         remoteControls.getParameter(idx).value().set(data2, 128);
+         println("CC: CONTROLLER: " + CONTROLLER + "(" + data1 + ")=" + data2);
       }
       if (NRPN_NEW) { // NRPN
          CONTROLLER = NRPN_NUMS[NRPN_NUM];
          SWITCH = (NRPN_VAL == 0) ? 'OFF' : 'ON';
-         println("NRPN: CONTROLLER: " + CONTROLLER + "=" + SWITCH);
          OLD_MS = MS;
          NRPN_NUM = 0;
          NRPN_VAL = 0;
+         println("NRPN: CONTROLLER: " + CONTROLLER + "=" + SWITCH);
       } 
    }
 }
