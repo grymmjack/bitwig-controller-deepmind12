@@ -101,7 +101,7 @@ function init() {
    cursorTrack = host.createCursorTrack(1, 1);
    primaryDevice = cursorTrack.createCursorDevice();
    primaryDevice.exists().markInterested();
-   remoteControls = primaryDevice.createCursorRemoteControlsPage(46);
+   remoteControls = primaryDevice.createCursorRemoteControlsPage(CC_MAP.length);
    
    // Notifications:
    host.getNotificationSettings().setShouldShowSelectionNotifications(true);
