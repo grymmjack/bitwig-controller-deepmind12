@@ -139,7 +139,6 @@ function onMidi(status, data1, data2) {
       if (NRPN_NEW) { // NRPN
          CONTROLLER = NRPN_NUMS[NRPN_NUM];
          SWITCH = (NRPN_VAL == 0) ? 'OFF' : 'ON';
-         OLD_MS = MS;
          NRPN_NUM = 0;
          NRPN_VAL = 0;
          println("NRPN: CONTROLLER: " + CONTROLLER + "=" + SWITCH);
