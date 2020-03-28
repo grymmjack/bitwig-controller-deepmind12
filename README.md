@@ -35,6 +35,7 @@ When setup properly you can use the sliders on your DeepMind12 to control parame
 custom mapping required.
 
 ## Defaults (Right-handed):
+```
 Bitwig Knob 1: UNISON DETUNE
 Bitwig Knob 2: VCF FREQ
 Bitwig Knob 3: VCF RES
@@ -43,5 +44,6 @@ Bitwig Knob 5: VCF LFO
 Bitwig Knob 6: VCF KYBD
 Bitwig Knob 7: VCA LEVEL
 Bitwig Knob 8: HPF FREQ
+```
 
 If you like, you can remap the sliders just put them in the order in the JS script you like in the CCs object.
