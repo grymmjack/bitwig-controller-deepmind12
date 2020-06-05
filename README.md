@@ -3,7 +3,7 @@ Behringer DeepMind12 Bitwig Studio Controller Script
 
 The Behringer DeepMind12 is not supported by default in Bitwig Studio, but now it is supported by adding this script.
 
-For more information and a detailed walkthrough watch this video on YouTube:
+For more information and a detailed walkthrough watch this video on YouTube:  
 https://www.youtube.com/watch?v=2QxC-hKXOoI
 
 I have submitted my controller to Bitwig, hopefully they will add it to the Community script section:
