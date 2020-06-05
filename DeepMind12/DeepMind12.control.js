@@ -122,7 +122,7 @@ function onMidi(status, data1, data2) {
    var NOTE_NUM = (NOTE_ON || NOTE_OFF) ? data1 : 0;
    var NRPN_NEW = (status == 176 && data1 == 38 && NRPN_NUM);
 
-   if (status != 208) { // IGNORE AFTERTOUCH
+   if (status != 208 && status != 224) { // IGNORE AFTERTOUCH && PITCHBEND
       if (NOTE_ON || NOTE_OFF) { // NOTE
          var VELOCITY = data2;
          var OCTAVE   = (parseInt((NOTE_NUM / 12)) - 1);
